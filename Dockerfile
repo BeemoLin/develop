@@ -3,6 +3,7 @@ FROM ubuntu
 MAINTAINER Beemo Lin dteout@gmail.com
 
 # make sure the package repository is up to date
+WORKDIR /root
 
 RUN mkdir ~/sites
 RUN apt-get update -y

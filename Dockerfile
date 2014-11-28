@@ -3,11 +3,9 @@ FROM ubuntu
 MAINTAINER Beemo Lin dteout@gmail.com
 
 # make sure the package repository is up to date
-WORKDIR /root
 
 RUN mkdir ~/sites
 RUN apt-get update -y
-RUN apt-get upgrade -y
 
 # install vim
 RUN apt-get install -y vim git wget curl tidy php5-cli php-pear
@@ -18,15 +16,13 @@ RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import -
 RUN curl -sSL https://get.rvm.io | bash -s stable
 
-RUN /bin/bash -l -c "source /etc/profile.d/rvm.sh"
+ENV PATH /usr/local/rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-RUN /bin/bash -l -c 'echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc'
+RUN ["/bin/bash", "-l", "-c", "rvm requirements; echo 'source /usr/local/rvm/scripts/rvm' >> ~/.bashrc;"]
 
-RUN /bin/bash -l -c "rvm install 2.1.5"
+RUN ["/bin/bash", "-l", "-c", "rvm install 2.1.5; rvm use 2.1.5 --default;"]
 
-RUN /bin/bash -l -c "rvm use 2.1.5 --default"
-
-RUN /bin/bash -l -c "gem install ruby-lint"
+RUN ["/bin/bash", "-l", "-c", "gem install bundler --no-ri --no-rdoc; gem install ruby-lint;"]
 
 RUN git clone https://github.com/BeemoLin/vim.git ~/vim
 
